@@ -244,7 +244,7 @@ Previous saved, or shared data to prefill the form
 
 ![form](https://github.com/cesarve77/source-template/raw/master/docs/source-template-form.png)
 
-![template](https://github.com/cesarve77/source-template/raw/master/docs/source-template-remplate.png)
+![template](https://github.com/cesarve77/source-template/raw/master/docs/source-template-template.png)
 
 
 ## Contribute
