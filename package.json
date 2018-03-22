@@ -1,6 +1,6 @@
 {
   "name": "source-template",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "source code generator. The best way get, present and share your code",
   "main": "./dist/index.js",
   "scripts": {
