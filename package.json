@@ -1,0 +1,47 @@
+{
+  "name": "source-template",
+  "version": "0.0.1",
+  "description": "source code generator. The best way to present and share your code",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cesarve77/source-template.git"
+  },
+  "keywords": [
+    "template",
+    "reacts",
+    "scaffold",
+    "scaffolding",
+    "build",
+    "system"
+  ],
+  "author": "Cesar Ramos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cesarve77/source-template/issues"
+  },
+  "homepage": "https://github.com/cesarve77/source-template#readme",
+  "dependencies": {
+    "brace": "^0.11.1",
+    "doctrine": "^2.1.0",
+    "handlebars": "^4.0.11",
+    "react-ace": "^5.9.0",
+    "uniforms": "^1.23.2"
+  },
+  "peerDependencies": {
+    "react": "^16.0.0 || ^15.0.0 || ^0.14.0",
+    "react-dom": "^16.0.0 || ^15.0.0 || ^0.14.0",
+    "simpl-schema": ">=0.0.4 <2.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-parameters": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1"
+  }
+}

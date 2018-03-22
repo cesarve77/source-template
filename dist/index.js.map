@@ -1,0 +1,1 @@
+{"version":3,"sources":["../index.js"],"names":[],"mappings":";;;;;;AAIA;;;;;;4CAJA","file":"index.js","sourcesContent":["/**\n * Created by cesar on 21/3/18.\n */\n\nimport SourceTemplate from './src/SourceTemplate'\n\nexport default SourceTemplate"]}
