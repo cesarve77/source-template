@@ -242,9 +242,9 @@ and shared among the other templates with the same fields
 Previous saved, or shared data to prefill the form
 
 
-![form](https://raw.githubusercontent.com/cesarve/source-template/master/docs/source-template-form.png)
+![form](https://github.com/cesarve77/source-template/raw/master/docs/source-template-form.png)
 
-![template](https://raw.githubusercontent.com/cesarve/source-template/master/docs/source-template-template.png)
+![template](https://github.com/cesarve77/source-template/raw/master/docs/source-template-remplate.png)
 
 
 ## Contribute
