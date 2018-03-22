@@ -9,12 +9,8 @@ import {copyTextToClipboard, getSchema, removeComments, solveTemplate} from "./u
 
 
 class SourceTemplate extends Component {
-    constructor(props) {
-        super(props)
-        this.code = this.getCode(props.data)
-    }
 
-    state = {userData: this.props.userData, template: this.props.template, showForm: false, editTemplate: !this.props.data}
+    state = {data: this.props.data, template: this.props.template, showForm: false, editTemplate: !this.props.data}
 
     componentWillReceiveProps(nextProps) {
         const {userData} = nextProps
@@ -35,12 +31,13 @@ class SourceTemplate extends Component {
         this.output = 'download'
         this.form.submit()
     }
-    onSubmit = (userData) => {
-        const {onUserData} = this.props
-        onUserData && onUserData(userData)
-        return Promise.resolve(this.getCode(userData))
+    onSubmit = (data) => {
+        const {onDataChange} = this.props
+        onDataChange && onDataChange(data)
+        return Promise.resolve(this.getCode())
     }
     onSubmitSuccess = (sourceCode) => {
+
         if (this.output === 'download') {
             const element = document.createElement('a');
             element.setAttribute('href', 'data:text/text;charset=utf-8,' + encodeURI(removeComments(sourceCode)));
@@ -57,13 +54,13 @@ class SourceTemplate extends Component {
         this.setState({showForm: false})
     }
     autoForm = () => {
-        const {template, userData} = this.state
+        const {template, data} = this.state
         return (
             <Wrapper onCopy={this.onCopy} onDownload={this.onDownload} onClose={this.hideForm}>
                 <AutoForm
                     ref={form => this.form = form}
                     schema={getSchema(template)}
-                    model={{userData}}
+                    model={{data}}
                     onSubmit={this.onSubmit}
                     onSubmitSuccess={this.onSubmitSuccess}
                 >
@@ -78,7 +75,8 @@ class SourceTemplate extends Component {
 
     onChange = (template, e) => {
         this.setState({template})
-        const {onChange} = this.props
+        const {onDataChange, onChange} = this.props
+        onDataChange && onDataChange(template, e)
         onChange && onChange(template, e)
     }
     captureCopy = (copied) => {
@@ -90,29 +88,30 @@ class SourceTemplate extends Component {
 
     render() {
         const {template, showForm, editTemplate} = this.state
-        const {data, ...props} = this.props
+        const {data, allowEdit, ...props} = this.props
         delete props.template
-        delete props.userData
+        delete props.onDataChange
+        delete props.onTemplateChange
         return (
             <div style={{height: props.height, width: props.width}}>
                 <AceEditor
                     style={{display: `${!showForm && !editTemplate ? '' : 'none'}`}}
-                    onChange={this.onChange}
                     editorProps={{$blockScrolling: true}}
                     {...props}
+                    onChange={this.onChange}
                     readOnly
-                    value={this.code}
+                    value={this.getCode(data)}
                     onCopy={this.captureCopy}
                 />
-                <AceEditor
+                {allowEdit && <AceEditor
                     style={{display: `${!showForm && editTemplate ? '' : 'none'}`}}
                     onChange={this.onChange}
                     editorProps={{$blockScrolling: true}}
                     {...props}
                     value={template}
-                />
+                />}
                 <br/>
-                {!showForm && !editTemplate && <Button onClick={() => this.setState({editTemplate: true})}>Edit template</Button>}
+                {allowEdit && !showForm && !editTemplate && <Button onClick={() => this.setState({editTemplate: true})}>Edit template</Button>}
                 {!showForm && editTemplate && <Button onClick={() => this.setState({editTemplate: false})}>Show code</Button>}
                 {!showForm && <Button onClick={this.showForm}>Get code</Button>}
                 {showForm && this.autoForm()}
@@ -125,6 +124,7 @@ class SourceTemplate extends Component {
         name: 'file.js',
         mode: "javascript",
         theme: "github",
+        allowEdit: true,
         fontSize: 14,
         showPrintMargin: true,
         showGutter: true,
@@ -135,8 +135,9 @@ class SourceTemplate extends Component {
     static propTypes = {
         template: PropTypes.string.isRequired,
         data: PropTypes.object,
-        userData: PropTypes.object,
-
+        onDataChange: PropTypes.func,
+        onTemplateChange: PropTypes.func,
+        allowEdit: PropTypes.bool,
 
     }
 }

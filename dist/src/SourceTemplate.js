@@ -43,35 +43,32 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var SourceTemplate = function (_Component) {
     _inherits(SourceTemplate, _Component);
 
-    function SourceTemplate(props) {
+    function SourceTemplate() {
+        var _ref;
+
+        var _temp, _this, _ret;
+
         _classCallCheck(this, SourceTemplate);
 
-        var _this = _possibleConstructorReturn(this, (SourceTemplate.__proto__ || Object.getPrototypeOf(SourceTemplate)).call(this, props));
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
 
-        _this.state = { userData: _this.props.userData, template: _this.props.template, showForm: false, editTemplate: !_this.props.data };
-
-        _this.getCode = function (data) {
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = SourceTemplate.__proto__ || Object.getPrototypeOf(SourceTemplate)).call.apply(_ref, [this].concat(args))), _this), _this.state = { data: _this.props.data, template: _this.props.template, showForm: false, editTemplate: !_this.props.data }, _this.getCode = function (data) {
             return (0, _utils.solveTemplate)(_this.state.template, data);
-        };
-
-        _this.onCopy = function () {
+        }, _this.onCopy = function () {
             _this.output = 'copy';
             _this.form.submit();
-        };
-
-        _this.onDownload = function () {
+        }, _this.onDownload = function () {
             _this.output = 'download';
             _this.form.submit();
-        };
+        }, _this.onSubmit = function (data) {
+            var onDataChange = _this.props.onDataChange;
 
-        _this.onSubmit = function (userData) {
-            var onUserData = _this.props.onUserData;
+            onDataChange && onDataChange(data);
+            return Promise.resolve(_this.getCode());
+        }, _this.onSubmitSuccess = function (sourceCode) {
 
-            onUserData && onUserData(userData);
-            return Promise.resolve(_this.getCode(userData));
-        };
-
-        _this.onSubmitSuccess = function (sourceCode) {
             if (_this.output === 'download') {
                 var element = document.createElement('a');
                 element.setAttribute('href', 'data:text/text;charset=utf-8,' + encodeURI((0, _utils.removeComments)(sourceCode)));
@@ -85,16 +82,12 @@ var SourceTemplate = function (_Component) {
                 });
             }
             _this.hideForm();
-        };
-
-        _this.hideForm = function () {
+        }, _this.hideForm = function () {
             _this.setState({ showForm: false });
-        };
-
-        _this.autoForm = function () {
+        }, _this.autoForm = function () {
             var _this$state = _this.state,
                 template = _this$state.template,
-                userData = _this$state.userData;
+                data = _this$state.data;
 
             return _react2.default.createElement(
                 _StyledComponets.Wrapper,
@@ -106,7 +99,7 @@ var SourceTemplate = function (_Component) {
                             return _this.form = form;
                         },
                         schema: (0, _utils.getSchema)(template),
-                        model: { userData: userData },
+                        model: { data: data },
                         onSubmit: _this.onSubmit,
                         onSubmitSuccess: _this.onSubmitSuccess
                     },
@@ -115,25 +108,19 @@ var SourceTemplate = function (_Component) {
                     _react2.default.createElement('br', null)
                 )
             );
-        };
-
-        _this.onChange = function (template, e) {
+        }, _this.onChange = function (template, e) {
             _this.setState({ template: template });
-            var onChange = _this.props.onChange;
+            var _this$props = _this.props,
+                onDataChange = _this$props.onDataChange,
+                onChange = _this$props.onChange;
 
+            onDataChange && onDataChange(template, e);
             onChange && onChange(template, e);
-        };
-
-        _this.captureCopy = function (copied) {
+        }, _this.captureCopy = function (copied) {
             if (copied.length === _this.code.length) _this.showForm();
-        };
-
-        _this.showForm = function () {
+        }, _this.showForm = function () {
             _this.setState({ showForm: true });
-        };
-
-        _this.code = _this.getCode(props.data);
-        return _this;
+        }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
     _createClass(SourceTemplate, [{
@@ -157,23 +144,25 @@ var SourceTemplate = function (_Component) {
 
             var _props = this.props,
                 data = _props.data,
-                props = _objectWithoutProperties(_props, ['data']);
+                allowEdit = _props.allowEdit,
+                props = _objectWithoutProperties(_props, ['data', 'allowEdit']);
 
             delete props.template;
-            delete props.userData;
+            delete props.onDataChange;
+            delete props.onTemplateChange;
             return _react2.default.createElement(
                 'div',
                 { style: { height: props.height, width: props.width } },
                 _react2.default.createElement(_reactAce2.default, _extends({
                     style: { display: '' + (!showForm && !editTemplate ? '' : 'none') },
-                    onChange: this.onChange,
                     editorProps: { $blockScrolling: true }
                 }, props, {
+                    onChange: this.onChange,
                     readOnly: true,
-                    value: this.code,
+                    value: this.getCode(data),
                     onCopy: this.captureCopy
                 })),
-                _react2.default.createElement(_reactAce2.default, _extends({
+                allowEdit && _react2.default.createElement(_reactAce2.default, _extends({
                     style: { display: '' + (!showForm && editTemplate ? '' : 'none') },
                     onChange: this.onChange,
                     editorProps: { $blockScrolling: true }
@@ -181,7 +170,7 @@ var SourceTemplate = function (_Component) {
                     value: template
                 })),
                 _react2.default.createElement('br', null),
-                !showForm && !editTemplate && _react2.default.createElement(
+                allowEdit && !showForm && !editTemplate && _react2.default.createElement(
                     _StyledComponets.Button,
                     { onClick: function onClick() {
                             return _this2.setState({ editTemplate: true });
@@ -212,6 +201,7 @@ SourceTemplate.defaultProps = {
     name: 'file.js',
     mode: "javascript",
     theme: "github",
+    allowEdit: true,
     fontSize: 14,
     showPrintMargin: true,
     showGutter: true,
@@ -222,7 +212,9 @@ SourceTemplate.defaultProps = {
 SourceTemplate.propTypes = {
     template: _propTypes2.default.string.isRequired,
     data: _propTypes2.default.object,
-    userData: _propTypes2.default.object
+    onDataChange: _propTypes2.default.func,
+    onTemplateChange: _propTypes2.default.func,
+    allowEdit: _propTypes2.default.bool
 
 };
 exports.default = SourceTemplate;

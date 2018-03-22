@@ -189,13 +189,15 @@ You can set  advanced features to teplate fields with comments. Source Template 
 Use @param tag for set your advanced features anywhere in the code, together or separated
 
 e.g.
+``` 
 /**
  * @param {string=} value - there the description of value
  */
+ ```
  
-Where 'value' is the name of the field bettwen {{ }}
-Where 'string' is the field type in the form, can be 'val1'|'val2'|'val3' for enum (select)
-Where '=' determine if is optional or not, omit for required
+* Where 'value' is the name of the field bettwen {{ }}
+* Where 'string' is the field type in the form, can be 'val1'|'val2'|'val3' for enum (select)
+* Where '=' determine if is optional or not, omit for required
 
 
 
@@ -205,8 +207,8 @@ Where '=' determine if is optional or not, omit for required
 import React from 'react'
 import SourceTemplate from 'source-template'
 import buildQuery from './buildQuery'
-import saveUserData from './saveUserData'
-import getUserData from './getUserData'
+import saveTemplate from './saveUserData'
+import saveData from './saveData'
 
 const MyComponent=()=>{
     const data={
@@ -219,10 +221,10 @@ const MyComponent=()=>{
         return {{Collection}}.find(query,{limit})
     }
     `
-    const onUserData=saveUserData()
-    const userData=getUserData()
+    const onTemplateChange=(data)=>saveTemplate(data)
+    const onDataChange=(data)=>saveData(data)
     return (
-        <SourceTemplate data={data} template={publicationsTemplate} onUserData={onUserData} userData={userData}/>
+        <SourceTemplate data={data} allowEdit={true} template={publicationsTemplate} onDataChange={onDataChange} onTemplateChange={onTemplateChange}/>
     )
 }
 ```
@@ -234,12 +236,12 @@ Required String. String with source code handlebar style template
 * **data*** 
 Dummy data for showing propouse  
 
-* **onUserData**
+* **onTemplateChange**
+Called when the user change the template, probably you don't need to use this if your are sharing your template,
+
+* **onDataChange**
 Called when the user fill the form and submit, the idea is save this data in a parent component for example 
 and shared among the other templates with the same fields
-
-* **userData**
-Previous saved, or shared data to prefill the form
 
 
 

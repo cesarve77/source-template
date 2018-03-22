@@ -1,14 +1,14 @@
 {
   "name": "source-template",
   "version": "0.0.1",
-  "description": "source code generator. The best way to present and share your code",
+  "description": "source code generator. The best way get, present and share your code",
   "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cesarve77/source-template.git"
+    "url": "https://github.com/cesarve77/source-template.git"
   },
   "keywords": [
     "template",
